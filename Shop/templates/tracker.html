@@ -1,0 +1,61 @@
+{% extends 'basic.html' %}
+{% block title %} <title>Check Your Order</title>{% endblock %}
+{% block css %}
+{% endblock%}
+{% block body %}
+
+<div class="container mt-5">
+    <h2>Your Orders</h2>
+    <div id="orderCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for order in user_orders %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Order ID: {{ order.Order_id }}</h5>
+                        <p class="card-text">Address: {{ order.Address }}</p>
+                        <p class="card-text">Zip Code: {{ order.Zip_Code }}</p>
+                        <p class="card-text">Paymment Method: {% if order.order_Method %}Bank Transfer{% else %}Cash On
+                            Delivery{% endif %}</p>
+                        <p class="card-text">Order Items: {{ order.item_json }}</p>
+                        <h4>Order Updates:</h4>
+                        <ul>
+
+
+
+                            <ol class="list-group list-group-numbered">
+                                {% for update in order.order_updates.all %}
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold"></div>
+                                        {{ update.order_Status }}
+                                    </div>
+                                    <span class="badge text-bg-primary rounded-pill">{{ update.order_time }}</span>
+                                </li>
+                                {% endfor %}
+                            </ol>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#orderCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#orderCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+{% block js %}
+<script>
+
+</script>
+{% endblock %}

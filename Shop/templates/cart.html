@@ -1,0 +1,114 @@
+{% extends 'basic.html' %}
+
+{% block title %}
+<title>Your Cart</title>
+{% endblock %}
+
+{% block css %}
+<!-- Add any specific CSS if needed -->
+{% endblock %}
+
+{% block body %}
+
+<body class="bg-body-tertiary">
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    <strong>Message : </strong> {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+
+  <div class="container">
+    <main>
+      <div class="py-5 text-center">
+        <div class="section-header container">
+          <p>Thanks for <span>Choosing Us</span>..</p>
+        </div>
+        <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group
+          has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+      </div>
+
+      <div class="row g-5">
+        <div class="col-md-5 col-lg-4 order-md-last">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Your cart</span>
+            <span class="badge bg-primary rounded-pill" id="total_item">{{ cart_items|length }}</span>
+          </h4>
+
+          <ul id="cart-items-list">
+            {% for item in cart_items %}
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">{{ item.product.Art_Name }}</h6>
+                <small class="text-body-secondary">{{ item.product.upload_by.store_Name }}</small>
+              </div>
+              <span class="text-body-secondary"><b>${{ item.product.price }}</b> x {{ item.quantity }}</span>
+            </li>
+            <input type="hidden" name="" id="">
+            {% endfor %}
+          </ul>
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Total (Bill)</span>
+            <strong id="totalcart">
+              <div class="alert alert-info ms-2" role="alert">
+                ${{ total_price }}
+              </div>
+            </strong>
+          </li>
+
+          <form class="card p-2">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Promo code">
+              <button type="submit" class="btn btn-secondary">Redeem</button>
+
+            </div>
+          </form>
+          <a href="{% url 'clear_cart' %}"><button class="btn btn-danger mt-3">Clear Cart</button></a>
+        </div>
+        <div class="col-md-7 col-lg-8">
+          {% if user.is_authenticated %}
+          <h4 class="mb-3">Billing address</h4>
+          <form method="post" action="{% url 'order' %}">
+            {% csrf_token %}
+
+            <input type="hidden" name="itemJson" id="itemJson" value="">
+            <input type="text" name="Address" placeholder="Your Address" required>
+            <input type="text" name="zip-code" placeholder="Your Area Code" required>
+            <input type="radio" name="method" value="on" checked> Cash On Delivery
+            <input type="radio" name="method" value="off"> Bank Transfer
+            <button type="submit">Place Order</button>
+          </form>
+
+        </div>
+      </div>
+
+      {% endif %}
+  </div>
+  </main>
+  </div>
+</body>
+{% endblock %}
+{% block js %}
+<script>
+  // Wait until the DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get the list of cart items
+    var cartItemsList = document.getElementById("cart-items-list");
+
+    // Get all the <li> elements inside the cartItemsList
+    var cartItems = cartItemsList.getElementsByTagName("li");
+
+    // Initialize a variable to store the formatted string of all items
+    var formattedCartItems = "Total Items :  {{ cart_items|length }} ";
+
+    // Loop through each item and format its inner content
+    {% for item in cart_items %}
+    formattedCartItems += "Store: {{ item.product.upload_by.store_Name }} : Product: {{ item.product.Art_Name }} : Price: ${{ item.product.price }} x {{ item.quantity }}\n";
+    {% endfor %}
+
+    // Set the formatted string to the hidden input in another form
+    document.getElementById("itemJson").value = formattedCartItems.trim();
+  });
+
+</script>
+{% endblock %}

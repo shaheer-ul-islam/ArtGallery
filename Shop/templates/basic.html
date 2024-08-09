@@ -1,0 +1,526 @@
+{% load static%}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block title %}{% endblock %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* .google-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+} */
+  </style>
+   <style>
+    /* From Uiverse.io by alexruix */
+    .loader {
+        width: 48px;
+        height: 48px;
+        margin: auto;
+        position: relative;
+    }
+
+    .loader:before {
+        content: '';
+        width: 48px;
+        height: 5px;
+        background: #f0808050;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        border-radius: 50%;
+        animation: shadow324 0.5s linear infinite;
+    }
+
+    .loader:after {
+        content: '';
+        width: 100%;
+        height: 100%;
+        background: #f08080;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 4px;
+        animation: jump7456 0.5s linear infinite;
+    }
+
+    @keyframes jump7456 {
+        15% {
+            border-bottom-right-radius: 3px;
+        }
+
+        25% {
+            transform: translateY(9px) rotate(22.5deg);
+        }
+
+        50% {
+            transform: translateY(18px) scale(1, .9) rotate(45deg);
+            border-bottom-right-radius: 40px;
+        }
+
+        75% {
+            transform: translateY(9px) rotate(67.5deg);
+        }
+
+        100% {
+            transform: translateY(0) rotate(90deg);
+        }
+    }
+
+    @keyframes shadow324 {
+        0%, 100% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.2, 1);
+        }
+    }
+
+    /* Additional styles for the loading screen */
+    #loadingScreen {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    body.loading #content {
+        display: none;
+    }
+</style>
+  <link rel="stylesheet" href="static/basic.css">
+  {% block style %}{% endblock %}
+</head>
+
+<body class="loading">
+  
+    <div id="loadingScreen">
+        <div class="loader"></div>
+    </div>
+
+  <nav class="navbar navbar-dark bg-dark py-4">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+        aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+        aria-labelledby="offcanvasDarkNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title heading" id="offcanvasDarkNavbarLabel">ArtGallery</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link {% block homeactive %} {% endblock homeactive %}" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block contactactive %} {% endblock contactactive %}" href="/contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled {% block aboutactive %} {% endblock aboutactive %}" href="/about">About</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle {% block accountactive %} {% endblock accountactive %}" href="#"
+                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Account
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                {% if user.is_authenticated %}
+
+                <li><a class="dropdown-item" id="check_account" href="#">{{request.user.type}}</a></li>
+                <li>
+                  {% endif %}
+                  <hr class="dropdown-divider">
+                </li>
+              </ul>
+            </li>
+
+          </ul>
+          
+        </div>
+
+        <ul class="wrapper">
+          <li class="icon facebook">
+            <span class="tooltip">Facebook</span>
+            <svg viewBox="0 0 320 512" height="1.2em" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z">
+              </path>
+            </svg>
+          </li>
+          <li class="icon twitter">
+            <span class="tooltip">Twitter</span>
+            <svg height="1.8em" fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"
+              class="twitter">
+              <path
+                d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429">
+              </path>
+            </svg>
+          </li>
+          <li class="icon instagram">
+            <span class="tooltip">Instagram</span>
+            <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" class="bi bi-instagram"
+              viewBox="0 0 16 16">
+              <path
+                d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z">
+              </path>
+            </svg>
+          </li>
+        </ul>
+      </div>
+      <a class="navbar-brand heading" href="/">ArtGallery</a>
+
+      <!-- <a href=""class="btn btn-sm btn-outline-secondary">Account</a> -->
+      <!-- Login and Signup Modal -->
+      <div id="authModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('authModal')">&times;</span>
+          <div id="loginForm">
+            <h2>Login</h2>
+            <form action="/login" method="post">{% csrf_token %}
+              <!-- Add your login form fields here -->
+              <label for="loginEmail">Email:</label>
+              <input type="text" id="email" name="email" required>
+
+              <label for="loginPassword">Password:</label>
+              <input type="password" id="loginPassword" name="loginPassword" required>
+
+              <button type="submit">Login</button>
+            </form>
+            <p>Forget Password 😣 <a href="password_reset/" onclick="switchAuthForms('signupForm')">Reset Password</a>
+            </p>
+            <p>Don't have an account? <a href="#" onclick="switchAuthForms('signupForm')">Signup here</a></p>
+          </div>
+
+          <div id="signupForm" style="display: none;">
+            <h2>Signup</h2>
+            <form action="/signup" method="post" onsubmit="return validatePassword()">
+              <!-- Add your signup form fields here -->
+              {% csrf_token %}
+              <label for="signupUsername">Name:</label>
+              <input type="text" id="name" name="name" required>
+
+              <label for="signupEmail">Email:</label>
+              <input type="email" id="email" name="email" required>
+
+              <label for="phone">Phone: <div style="font-size: smaller;">Enter Phone Number without Zero i-e 3150000000
+                </div></label>
+              <input type="phone" id="phone" name="phone" required maxlength="10">
+
+              <label for="pass1">Password:</label>
+              <input type="password" id="pass1" name="pass1" required>
+
+              <label for="pass2">Confirm Password:</label>
+              <input type="password" id="pass2" name="pass2" required>
+              <span id="passwordError" style="color: red;"></span>
+
+              <button type="submit">Signup</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="switchAuthForms('loginForm')">Login here</a></p>
+          </div>
+
+          <p class="or-divider container ">or</p>
+          <button class="google-btn" onclick="continueWithGoogle()">
+            <img src="google-logo.png" alt="" class="google-logo">Google
+          </button>
+          <button class="facebook-btn" onclick="continueWithFacebook()">
+            <img src="Facebook-logo.png" alt="" class="google-logo">Facebook
+          </button>
+        </div>
+      </div>
+      <form class="d-flex mt-3" role="search" method="search" action="/search">
+        <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query"
+          id="query">
+        <button class="btn btn-success" type="submit">Search</button> -->
+        <div class="searchBox">
+
+          <input class="searchInput" type="search" name="query" id="query" placeholder="Search something">
+          <button class="searchButton" type="submit">
+
+
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
+              <g clip-path="url(#clip0_2_17)">
+                <g filter="url(#filter0_d_2_17)">
+                  <path
+                    d="M23.7953 23.9182L19.0585 19.1814M19.0585 19.1814C19.8188 18.4211 20.4219 17.5185 20.8333 16.5251C21.2448 15.5318 21.4566 14.4671 21.4566 13.3919C21.4566 12.3167 21.2448 11.252 20.8333 10.2587C20.4219 9.2653 19.8188 8.36271 19.0585 7.60242C18.2982 6.84214 17.3956 6.23905 16.4022 5.82759C15.4089 5.41612 14.3442 5.20435 13.269 5.20435C12.1938 5.20435 11.1291 5.41612 10.1358 5.82759C9.1424 6.23905 8.23981 6.84214 7.47953 7.60242C5.94407 9.13789 5.08145 11.2204 5.08145 13.3919C5.08145 15.5634 5.94407 17.6459 7.47953 19.1814C9.01499 20.7168 11.0975 21.5794 13.269 21.5794C15.4405 21.5794 17.523 20.7168 19.0585 19.1814Z"
+                    stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    shape-rendering="crispEdges"></path>
+                </g>
+              </g>
+              <defs>
+                <filter id="filter0_d_2_17" x="-0.418549" y="3.70435" width="29.7139" height="29.7139"
+                  filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                  <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                    result="hardAlpha"></feColorMatrix>
+                  <feOffset dy="4"></feOffset>
+                  <feGaussianBlur stdDeviation="2"></feGaussianBlur>
+                  <feComposite in2="hardAlpha" operator="out"></feComposite>
+                  <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
+                  <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_17"></feBlend>
+                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_17" result="shape"></feBlend>
+                </filter>
+                <clipPath id="clip0_2_17">
+                  <rect width="28.0702" height="28.0702" fill="white" transform="translate(0.403503 0.526367)">
+                  </rect>
+                </clipPath>
+              </defs>
+            </svg>
+
+
+          </button>
+        </div>
+
+
+
+      </form>
+      <!-- Button to open modal -->
+      {% if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+          style="color: #cccbcb;">
+          Welcome <b>{{request.user.name}}</b>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark" style="margin-left: -10px;">
+          <li><a class="dropdown-item" href="/cart">Cart</a></li>
+          <hr class="dropdown-divider">
+          <li><a class="dropdown-item" href="/tracker">Order Tracker</a></li>
+          <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          <li>
+
+          <li>
+          </li>
+          <!-- <li><a class="dropdown-item" href="#">About Devolper</a></li> -->
+        </ul>
+      </li>
+      <!-- {{request.user.type}} -->
+      <!-- {% if request.user.type == 'SELLER' %}
+       Additional buttons for SELLER -->
+      <!-- <button class="nav-link" href="/manage-products">Manage Products</button> -->
+      <!-- Add more links/buttons as needed -->
+      <!-- {% elif request.user.type == 'CUSTOMER' %} -->
+      <!-- Additional buttons for CUSTOMER -->
+      <!-- <button class="nav-link" href="/cart">View Cart</button> -->
+      <!-- Add more links/buttons as needed -->
+      <!-- {% endif %} -->
+
+      {% else %}
+      <button onclick="openModal('authModal')">Login</button>
+      {% endif %}
+
+
+    </div>
+  </nav>
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    <strong>Message : </strong> {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+
+  {% block body %}{% endblock %}
+  <footer>
+    <div class="container">
+      <div class="row">
+        <!-- Google Map Location (6 columns) -->
+        <div class="col-md-6">
+          <div id="map">
+
+          </div>
+        </div>
+
+        <!-- Social Media Links (6 columns) -->
+        <div class="col-md-6 social-links">
+          <h4 class="heading mt-5">Meer Groups</h4>
+          <h3 class="heading mt-5">Follow Us</h3>
+          <a href="https://www.facebook.com/yourpage" target="_blank" title="Shaheer Ul Islam"><i
+              class="fab fa-facebook mx-3"></i></a>
+          <a href="https://www.facebook.com/yourpage" target="_blank" title="Shaheer Ul Islam"><i
+              class="fab fa-twitter mx-3"></i></a>
+          <a href="https://www.facebook.com/yourpage" target="_blank" title="Shaheer Ul Islam"><i
+              class="fab fa-linkedln mx-3"></i></a>
+          <a href="https://www.facebook.com/yourpage" target="_blank" title="Shaheer Ul Islam"><i
+              class="fab fa-youtube mx-3"></i></a>
+          <a href="https://www.facebook.com/yourpage" target="_blank" title="Shaheer Ul Islam"><i
+              class="fab fa-instagram mx-3"></i></a>
+          <hr>
+          <!-- Add more social media links as needed -->
+        </div>
+      </div>
+
+      <!-- Your contact information or additional footer content -->
+      <p>&copy; 2024 - 2025 Meer Groups. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="modal fade" id="SellerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Seller Application</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action='apply_seller' method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="signupUsername">Store Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="store_logo">Store Logo:</label>
+            <input type="file" name="store_logo" id="store_logo">
+
+            <label for="verification_image">Verify Yourself: <br><span style="font-size: small;">Upload Your Identity or
+                Passport or Driving License Card</span></label>
+            <input type="file" name="verification_image" id="verification_image" required>
+
+            <button type="submit">Signup</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+
+  </div>
+  </div>
+  </div>
+  </div>
+  <!-- Include Google Maps API script -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async
+    defer></script>
+  {% block script %}{% endblock %}
+  <script>
+    window.addEventListener("load", function() {
+        // Remove loading screen after page is fully loaded
+        document.querySelector('body').classList.remove('loading');
+        document.getElementById('loadingScreen').style.display = 'none';
+    });
+</script>
+  <script>
+    // Initialize Google Map
+    function initMap() {
+      var mapOptions = {
+        center: { lat: 34.45013326161951, lng: 73.25006595699081 }, // Replace with your latitude and longitude
+        zoom: 15,
+      };
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    }
+  </script>
+
+  <!-- Bootstrap JS (Popper.js and Bootstrap JS) -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <!-- Modal Script -->
+  <script>
+    let a = document.getElementById('check_account').innerHTML
+
+    if (a == 'SELLER' || a == 'SELLER, CUSTOMER' || 'CUSTOMER, SELLER') {
+      document.getElementById('check_account').innerHTML = `<a class="dropdown-item" id="check_account" href="/profile">Manage Account</a>
+      `
+    }
+    if (a == 'CUSTOMER') {
+      document.getElementById('check_account').innerHTML = `<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SellerModal" data-bs-whatever="@getbootstrap">Apply For Seller </button>`
+    }
+
+    else {
+      console.log("Login");
+    }
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+
+    function switchAuthForms(formToShow) {
+      document.getElementById('loginForm').style.display = formToShow === 'loginForm' ? 'block' : 'none';
+      document.getElementById('signupForm').style.display = formToShow === 'signupForm' ? 'block' : 'none';
+    }
+
+    function validatePassword() {
+      var pass1 = document.getElementById("pass1").value;
+      var pass2 = document.getElementById("pass2").value;
+
+      if (pass1 !== pass2) {
+        document.getElementById("passwordError").innerHTML = "Passwords do not match.";
+        return false;
+      } else {
+        document.getElementById("passwordError").innerHTML = "";
+        return true;
+      }
+    }
+
+    function continueWithGoogle() {
+      // Add your Google authentication logic here
+      alert("Continue with Google clicked!");
+    }
+    function continueWithFacebook() {
+      // Add your Google authentication logic here
+      alert("Continue with Facebook clicked!");
+    }
+  </script>
+  {% block js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const profileDropdownBtn = document.querySelector('.profile-header .dropdown-btn');
+      const profileDropdownContent = document.querySelector('.profile-header .dropdown-content');
+
+      profileDropdownBtn.addEventListener('click', function () {
+        profileDropdownContent.style.display = profileDropdownContent.style.display === 'block' ? 'none' : 'block';
+      });
+
+      document.addEventListener('click', function (event) {
+        if (!profileDropdownBtn.contains(event.target) && !profileDropdownContent.contains(event.target)) {
+          profileDropdownContent.style.display = 'none';
+        }
+      });
+
+      const cardDropdownBtns = document.querySelectorAll('.card-dropdown .dropdown-btn');
+      const cardDropdownContents = document.querySelectorAll('.card-dropdown .dropdown-content');
+
+      cardDropdownBtns.forEach((btn, index) => {
+        btn.addEventListener('click', function () {
+          cardDropdownContents[index].style.display = cardDropdownContents[index].style.display === 'block' ? 'none' : 'block';
+        });
+      });
+
+      document.addEventListener('click', function (event) {
+        if (!event.target.classList.contains('dropdown-btn')) {
+          cardDropdownContents.forEach(content => {
+            if (content.style.display === 'block') {
+              content.style.display = 'none';
+            }
+          });
+        }
+      });
+    });
+
+  </script>
+  {% endblock %}
+</body>
+
+</html>

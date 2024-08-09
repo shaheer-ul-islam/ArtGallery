@@ -1,0 +1,90 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.entry {
+  position: relative;
+  width: calc(20% - 20px);
+  padding-top: 20%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.entry-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease-in-out;
+  
+}
+
+.entry:hover .entry-image {
+  transform: scale(1.1);
+}
+
+.work-entry-hover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(128, 66, 66, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.entry:hover .work-entry-hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.work-entry-content {
+  color: #fff;
+  text-align: center;
+}
+
+.work-entry-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.work-entry-cat {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: auto; /* Ensures the buttons are at the bottom */
+  padding: 10px 0; /* Adds spacing for visibility */
+  background: #fff; /* Ensures the buttons stand out */
+}
+
+.hover-btn {
+  background: #fff;
+  color: #5A2E2E;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.hover-btn:hover {
+  background: #cd4f4f;
+}

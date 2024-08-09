@@ -1,0 +1,29 @@
+{% extends 'basic.html' %}
+{% block style %}
+<link rel="stylesheet" href="/static/home.css">
+{% endblock %}
+{% block body %}
+<br>
+<hr>
+<div class="grid container">
+  {% for product in Product %}
+  <!-- entry -->
+  <div class="entry work-entry branding ">
+    <a href="art/{{product.Art_id}}">
+      <div class="entry-image mm" style="background-image: url('/media/{{product.image}}')"></div>
+      <div class="work-entry-hover">
+        <div class="work-entry-content">
+          <div class="work-entry-title">{{product.Art_Name}}</div>
+          <div class="work-entry-cat">{{product.price}}</div>
+        </div>
+      </div>
+    </a>
+    <!-- <div class="button-container">
+      <a href="/Direct_Order/{{product.Art_id}}"><button class="hover-btn">Buy</button></a>
+      <a href="/add_to_cart/{{product.Art_id}}"><button class="hover-btn">Add to Cart</button></a>
+    </div> -->
+  </div>
+  {% endfor %}
+</div>
+<hr>
+{% endblock %}

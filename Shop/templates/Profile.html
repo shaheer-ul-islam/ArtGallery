@@ -1,0 +1,87 @@
+{% extends 'basic.html'%}
+
+{% block style %}
+<link rel="stylesheet" href="/static/basic.css">
+<link rel="stylesheet" href="/static/Profile.css">
+
+{% endblock %}
+
+{% block body %}
+<div>
+    <div class="profile-container">
+        <div class="image-slider">
+            {% for art in arts %}
+            <img src="{{ art.image.url }}" alt="{{ art.art_name }}" class="slide" />
+            {% endfor %}
+        </div>
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="profile-pic">
+                    <img src="{{ seller.store_Logo.url }}" alt="Profile Picture" />
+                    {% if seller.Verification_status %}
+                    <div class="verified-badge">&#10004;</div>
+                    {% endif %}
+                </div>
+                <h1 class="profile-name">{{ seller.store_Name }}</h1>
+
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">&#x22EE;</button>
+                <div class="dropdown-content">
+                    <a href="{{edit_profile}}">Edit Profile</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary mx-5" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Add Art
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Product</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="art-form" method="post" action="/add_art" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="Art_Name">Art Name:</label>
+                            <input type="text" id="Art_Name" name="Art_Name" required><br><br>
+                            <label for="image">Image:</label>
+                            <input type="file" id="image" name="image" accept="image/*" required><br><br>
+                            <label for="price">Price:</label>
+                            <input type="number" id="price" name="price" step="0.01" required><br><br>
+                            <label for="Type">Type:</label>
+                            <input type="text" id="Type" name="Type" required><br><br>
+                            <button type="submit" class="btn btn-primary">Post <a href="/add_art"></a></button>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="image-cards">
+            {% for art in arts %}
+            <div class="card">
+                <img src="{{art.image.url}}" alt="{{ art.art_name }}" />
+                <div class="card-dropdown">
+                    <button class="dropdown-btn">&#x22EE;</button>
+                    <div class="dropdown-content">
+                        <a href="/delete_art/{{art.Art_id}}" class="delete"
+                            onclick="return confirm('Are you sure you want to delete this art?');">Delete</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

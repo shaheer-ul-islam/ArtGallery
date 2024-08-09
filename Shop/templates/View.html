@@ -1,0 +1,174 @@
+{% extends "basic.html" %}
+{% load humanize %}
+{% load extras %}
+
+{% block title %}
+<title>{{ art.Art_Name }}</title>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="/static/View.css">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="main-product">
+    <div class="art-image">
+      {% if art.image %}
+      <img src="{{ art.image.url }}" alt="{{ art.Art_Name }}">
+      {% endif %}
+    </div>
+    <div class="art-info">
+      <h1>{{ art.Art_Name }}</h1>
+      <p><strong>Type:</strong> {{ art.Type }}</p>
+      <p><strong>Uploaded by:</strong> {{ art.upload_by.store_Name }}</p>
+      <p class="price">${{ art.price }}</p>
+      <a href="/Direct_Order/{{art}}"><button class="hover-btn btn">Buy</button></a>
+      <a href="/add_to_cart/{{art}}/"><button class="btn">Add to Cart</button></a>
+      
+    </div>
+  </div>
+
+  <div class="more-products">
+    <h2>Same From Store</h2>
+    {% for product in more_products %}
+    <div class="product-card">
+      <a href="/art/{{ product }}">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.Art_Name }}">
+        {% endif %}
+        <h3>{{ product.Art_Name }}</h3>
+        <p class="price">${{ product.price }}</p>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  <hr class='mx-5'>
+
+
+</div>
+<br>
+<hr>
+
+<div class="container">
+  <div class="col-md-12">
+    <h2 class="mb-4">Comments {{ comments.count }}</h2>
+    {% if user.is_authenticated %}
+    <form action="/review" method="post">
+      {% csrf_token %}
+      <div class="container row col-md-8">
+        <input type="hidden" name="PostSno" id="PostSno" value="{{ art.Art_id }}">
+        <input type="text" name="comment" class="col-md-10">
+        <input type="hidden" name="ParentSno" value="">
+        <div class="star-rating">
+          <span class="fa fa-star" data-rating="1"></span>
+          <span class="fa fa-star" data-rating="2"></span>
+          <span class="fa fa-star" data-rating="3"></span>
+          <span class="fa fa-star" data-rating="4"></span>
+          <span class="fa fa-star" data-rating="5"></span>
+          <input type="hidden" name="stars" class="rating-value" value="1">
+        </div>
+        <input type="submit" class="col-md-1 mx-4" value="Post">
+      </div>
+    </form>
+    {% else %}
+    <p class="mx-4" style="color: red; font-size: larger; font-weight: bold;">For Comment First Login</p>
+    {% endif %}
+    {% for comment in comments %}
+    <div class="row my-3">
+      <div class="col-md-1">
+        <img src="/static/avatar.jpg" width="80px" height="75px" style="border-radius: 50%;border:2px solid black" alt="">
+      </div>
+      <div class="col-md-11">
+        <p class="my-2">
+          <span style="font-weight: bold;">{{ comment.user.name }} </span>
+          {{ comment.timez | naturaltime }}
+        </p>
+        
+        <div class="star-rating">
+          {% for i in 1|to_range:6 %}  <!-- Assuming stars is between 1 and 5 -->
+              <span class="fa fa-star {% if comment.stars >= i %}checked{% endif %}"></span>
+          {% endfor %}
+      </div>
+      <p>{{ comment.comment }}</p>
+      </div>
+    </div>
+    <div>
+      <p class="d-inline-flex gap-1">
+        <a class="mx-5" data-bs-toggle="collapse" href="#replybox{{ comment.sno }}" aria-expanded="false" aria-controls="collapseExample">
+          Reply
+        </a>
+      </p>
+      <div class="collapse" id="replybox{{ comment.sno }}">
+        <div class="card-body mx-5">
+          {% if user.is_authenticated %}
+          <form action="/review" method="post">
+            {% csrf_token %}
+            <div class="container row">
+              <input type="hidden" name="PostSno" id="PostSno" value="{{ art.Art_id }}">
+              <input type="text" placeholder="Reply" name="comment" class="col-md-6 mx-4">
+              <input type="hidden" name="ParentSno" value="{{ comment.sno }}">
+              <div class="star-rating">
+                <span class="fa fa-star" data-rating="1"></span>
+                <span class="fa fa-star" data-rating="2"></span>
+                <span class="fa fa-star" data-rating="3"></span>
+                <span class="fa fa-star" data-rating="4"></span>
+                <span class="fa fa-star" data-rating="5"></span>
+                <input type="hidden" name="stars" class="rating-value" value="1">
+              </div>
+              <input type="submit" class="mx-4" value="Post">
+            </div>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      {% if replies|get_val:comment.sno %}
+      {% for reply in replies|get_val:comment.sno %}
+      <div class="replies mx-5">
+        <div class="row">
+          <div class="col-md-1">
+            <img src="/static/avatar.jpg" width="60px" height="60px" style="border-radius: 50%; border:2px solid black" alt="">
+          </div>
+          <div class="col-md-11">
+            <p class="my-2">
+              <span style="font-weight: bold;">{{ reply.user.name }} </span> {{ reply.timez | naturaltime }}
+            </p>
+            <p>{{ reply.comment }}</p>
+            
+          </div>
+        </div>
+        <br>
+        <div class="star-rating">
+          {% for i in 1|to_range:6 %}
+              <span class="fa fa-star {% if reply.stars >= i %}checked{% endif %}"></span>
+          {% endfor %}
+      </div>
+      <p>{{ reply.comment }}</p>
+      </div>
+      
+      {% endfor %}
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}
+{% block js %}
+<script>
+  $(document).ready(function(){
+      $('.star-rating .fa').on('click', function(){
+          var rating = $(this).data('rating');
+          $('.rating-value').val(rating);
+          $('.star-rating .fa').each(function(){
+              if ($(this).data('rating') <= rating) {
+                  $(this).addClass('checked');
+              } else {
+                  $(this).removeClass('checked');
+              }
+          });
+      });
+  });
+  </script>
+  {% endblock %}

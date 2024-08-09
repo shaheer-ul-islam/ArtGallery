@@ -1,0 +1,92 @@
+{% extends 'basic.html' %}
+{% block title %}<title> may help You ?</title>{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block body %}
+<section id="contact" class="contact">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Contact</h2>
+            <p>Need Help? <span>Contact Us</span></p>
+        </div>
+
+
+        <div class="row gy-4">
+
+            <div class="col-md-6">
+                <div class="info-item  d-flex align-items-center">
+                    <i class="icon bi bi-map flex-shrink-0"></i>
+                    <div>
+                        <h3>Our Address</h3>
+                        <p>21301 Mansehra Pakistan</p>
+                    </div>
+                </div>
+            </div><!-- End Info Item -->
+
+            <div class="col-md-6">
+                <div class="info-item d-flex align-items-center">
+                    <i class="icon bi bi-envelope flex-shrink-0"></i>
+                    <div>
+                        <h3>Email Us</h3>
+                        <p>shaheer.bajna@gmail.com</p>
+                    </div>
+                </div>
+            </div><!-- End Info Item -->
+
+            <div class="col-md-6">
+                <div class="info-item  d-flex align-items-center">
+                    <i class="icon bi bi-telephone flex-shrink-0"></i>
+                    <div>
+                        <h3>Call Us</h3>
+                        <p>+92 315 4105317</p>
+                    </div>
+                </div>
+            </div><!-- End Info Item -->
+
+            <div class="col-md-6">
+                <div class="info-item  d-flex align-items-center">
+                    <i class="icon bi bi-share flex-shrink-0"></i>
+                    <div>
+                        <h3>Opening Hours</h3>
+                        <div><strong>Mon-Sat:</strong> 8AM - 23PM;
+                            <strong>Sunday:</strong> Closed
+                            <p>We will response in Office Hours </p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Info Item -->
+
+        </div>
+        <h3 class="container">Our Team will Response as Soon as Possible</h3>
+        
+        <form action="/contact" method="post" class="p-3 p-md-4">{% csrf_token %}
+            <div class="row">
+                <div class="col-xl-6 form-group">
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-xl-6 form-group">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="contact" id="phone_no"
+                    placeholder="Your Active Phone Number" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+            </div>
+            <div class="text-center"><button type="submit" id="mess">Send Message</button></div>
+        </form>
+
+    </div>
+</section>
+{% endblock %}
+{% block script %}
+<script>
+</script>
+{% endblock %}
